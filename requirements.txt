@@ -1,0 +1,6 @@
+# Colab TPU runtime: jax and libtpu come from the runtime / Tunix pins
+google-tunix==0.1.7
+flax==0.12.10
+transformers==5.12.1
+tokenizers==0.22.2
+safetensors==0.7.0
