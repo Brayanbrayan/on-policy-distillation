@@ -18,7 +18,7 @@ def describe(model):
     n = sum(getattr(l, "size", 0) for l in leaves)
     print(f"  params: {n/1e9:.2f}B | dtypes: {sorted({str(getattr(l, 'dtype', '?')) for l in leaves})}")
 
-def load(model_id, mesh, root="/content/models"):
+def load(model_id, mesh, root="/content/weights"):
     path = f"{root}/{model_id.split('/')[-1].lower()}"
     model, _ = AutoModel.from_pretrained(model_id=model_id, mesh=mesh, model_download_path=path)
     return model
