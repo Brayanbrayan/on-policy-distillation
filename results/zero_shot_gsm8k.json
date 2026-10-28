@@ -1,0 +1,26 @@
+{
+  "Qwen3-0.6B": {
+    "n": 192,
+    "pass@1": 0.5833,
+    "boxed_rate": 0.8542,
+    "mean_len": 253.3,
+    "prompt_batch_shape": [
+      16,
+      256
+    ],
+    "longest_prompt": 163,
+    "seconds": 68
+  },
+  "Qwen3-1.7B": {
+    "n": 192,
+    "pass@1": 0.7292,
+    "boxed_rate": 0.875,
+    "mean_len": 279.2,
+    "prompt_batch_shape": [
+      16,
+      256
+    ],
+    "longest_prompt": 163,
+    "seconds": 82
+  }
+}
