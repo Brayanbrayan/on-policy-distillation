@@ -1,0 +1,9 @@
+{
+  "n_samples": 3712,
+  "tokens": 1002919,
+  "temperature": 1.0,
+  "mean_len": 270.2,
+  "truncated_frac": 0.1293,
+  "boxed_rate": 0.8941,
+  "teacher_sample_acc": 0.8071
+}
