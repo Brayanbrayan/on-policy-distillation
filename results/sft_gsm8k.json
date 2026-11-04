@@ -1,0 +1,13 @@
+{
+  "SFT-LoRA (1M teacher tokens)": {
+    "n": 192,
+    "pass@1": 0.5781,
+    "boxed_rate": 0.8438,
+    "mean_len": 282.4,
+    "prompt_batch_shape": [
+      16,
+      256
+    ],
+    "longest_prompt": 163
+  }
+}
