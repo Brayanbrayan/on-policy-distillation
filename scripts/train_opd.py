@@ -36,12 +36,15 @@ def parse(argv=None):
     p.add_argument("--seed", type=int, default=0)
     p.add_argument("--eval-every", type=int, default=0, help="0 = only at the end")
     p.add_argument("--eval-n", type=int, default=192)
+    p.add_argument("--ckpt-dir", default=None, help="LoRA checkpoints; default Drive/opd-runs/<name>")
     return p.parse_args(argv)
 
 
 def main(a):
-    run = f"results/runs/{a.name}"; os.makedirs(run, exist_ok=True)
+    run = f"results/runs/{a.name}"; os.makedirs(run, exist_ok=False)   # a new name per run, so logs never mix
     json.dump(vars(a), open(f"{run}/args.json", "w"), indent=2)
+    from google.colab import drive; drive.mount("/content/drive")
+    ckpt = a.ckpt_dir or f"/content/drive/MyDrive/opd-runs/{a.name}"; os.makedirs(ckpt, exist_ok=True)
     hf_tok = AutoTokenizer.from_pretrained(STUDENT_ID); tok = tokenizer_adapter.TokenizerAdapter(hf_tok)
     PAD = hf_tok.convert_tokens_to_ids("<|endoftext|>"); IM_END = hf_tok.convert_tokens_to_ids("<|im_end|>")
     eos = [IM_END, PAD]
@@ -84,6 +87,7 @@ def main(a):
         rec = {"step": step, "cum_gen_tokens": cum["gen"], "cum_teacher_scored_tokens": cum["scored"],
                "train_seconds": round(cum["sec"], 1), "eval_seconds": round(time.time() - t0), **res}
         open(f"{run}/eval.jsonl", "a").write(json.dumps(rec) + "\n"); print("EVAL", rec)
+        opd.save_lora(params, f"{ckpt}/lora_step{step}.npz")
         return rec
 
     sync_checked = False

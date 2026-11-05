@@ -38,3 +38,26 @@ def make_grad_fn(graphdef, pad_id, eos_id):
         (loss, lp), g = jax.value_and_grad(loss_fn, has_aux=True)(params)
         return loss, g, jax.lax.stop_gradient(lp)
     return grad_fn
+
+
+def save_lora(params, path):
+    """Save LoRA params to .npz (bf16 stored as float32, which is lossless)."""
+    np.savez(path, **{f"p{i}": np.asarray(x).astype(np.float32) for i, x in enumerate(jax.tree.leaves(params))})
+
+def load_lora(template, path):
+    z = np.load(path); leaves, treedef = jax.tree.flatten(template)
+    new = [jnp.asarray(z[f"p{i}"]).astype(x.dtype) for i, x in enumerate(leaves)]
+    assert len(z.files) == len(leaves) and all(n.shape == x.shape for n, x in zip(new, leaves)), "checkpoint does not match this LoRA setup"
+    return jax.tree.unflatten(treedef, new)
+
+def make_pg_grad_fn(graphdef, pad_id, eos_id):
+    """REINFORCE-style gradient with externally supplied per-token advantages (GRPO)."""
+    @jax.jit
+    def grad_fn(params, rest, prompt, comp, mask, adv, denom):
+        def loss_fn(p):
+            model = nnx.merge(graphdef, p, rest)
+            lp = token_logps(model, prompt, comp, pad_id, eos_id)
+            return -(adv * lp * mask).sum() / denom, lp
+        (loss, lp), g = jax.value_and_grad(loss_fn, has_aux=True)(params)
+        return loss, g, jax.lax.stop_gradient(lp)
+    return grad_fn
