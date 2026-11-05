@@ -40,7 +40,7 @@ def evaluate(sampler, hf_tok, eos, data, bs=16, max_new=384, max_prompt=256):
     longest = max(len(hf_tok.encode(p)) for p in prompts)
     assert longest <= max_prompt, f"prompt of {longest} tokens exceeds max_prompt={max_prompt}"
     assert len(data) % bs == 0, "use a multiple of the batch size to avoid recompiling"
-    correct = boxed = n_tok = 0
+    correct = boxed = n_tok = trunc = 0
     width = None
     for i in range(0, len(data), bs):
         out = sampler(input_strings=prompts[i:i + bs], max_generation_steps=max_new,
@@ -51,7 +51,7 @@ def evaluate(sampler, hf_tok, eos, data, bs=16, max_new=384, max_prompt=256):
             b = last_boxed(text)
             boxed += b is not None
             correct += is_correct(first_number(b), gold)
-            n_tok += len(toks)
+            n_tok += len(toks); trunc += len(toks) >= max_new
     n = len(data)
     return {"n": n, "pass@1": round(correct / n, 4), "boxed_rate": round(boxed / n, 4),
-            "mean_len": round(n_tok / n, 1), "prompt_batch_shape": list(width), "longest_prompt": longest}
+            "mean_len": round(n_tok / n, 1), "truncated_frac": round(trunc / n, 4), "prompt_batch_shape": list(width), "longest_prompt": longest}
