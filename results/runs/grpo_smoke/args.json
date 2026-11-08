@@ -1,0 +1,15 @@
+{
+  "name": "grpo_smoke",
+  "steps": 20,
+  "prompts": 4,
+  "group": 4,
+  "mb": 4,
+  "lr": 0.0001,
+  "warmup": 5,
+  "max_new": 384,
+  "max_prompt": 256,
+  "seed": 0,
+  "eval_every": 0,
+  "eval_n": 192,
+  "ckpt_dir": null
+}
