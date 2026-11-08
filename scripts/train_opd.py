@@ -68,6 +68,7 @@ def main(a):
     lora_vars = [v for v in smp.model_def_and_state()[1] if isinstance(v, nnx.LoRAParam)]
     assert lora_vars, "the sampler holds no LoRA variables"
     before = [np.array(opd.val(v)) for v in lora_vars]
+    opd.check_random_sampling(smp, ev.make_prompt(hf_tok, "What is 25 * 13? Show your work."), eos, a.max_prompt)
     print("sampler holds", len(lora_vars), "LoRA variables")
 
     sched = optax.warmup_cosine_decay_schedule(0.0, a.lr, a.warmup, a.steps, a.lr * 0.1)
@@ -96,7 +97,7 @@ def main(a):
         rows = [ds[int(j)] for j in order[(step - 1) * BS: step * BS]]
         prompts = [ev.make_prompt(hf_tok, r["question"]) for r in rows]
         out = smp(input_strings=prompts, max_generation_steps=a.max_new, max_prompt_length=a.max_prompt,
-                  temperature=1.0, top_k=None, top_p=None, eos_tokens=eos)       # temperature 1.0: true samples of the policy
+                  temperature=1.0, top_k=None, top_p=1.0, seed=a.seed * 100000 + step, eos_tokens=eos)       # temperature 1.0: true samples of the policy
         comp, mask, ended = opd.completion_batch(out.tokens, a.max_new, IM_END, PAD)
         prompt_arr = jnp.asarray(np.asarray(out.padded_prompt_tokens)); comp_j = jnp.asarray(comp); mask_j = jnp.asarray(mask)
         t_sample = time.time() - t0

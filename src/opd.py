@@ -61,3 +61,12 @@ def make_pg_grad_fn(graphdef, pad_id, eos_id):
         (loss, lp), g = jax.value_and_grad(loss_fn, has_aux=True)(params)
         return loss, g, jax.lax.stop_gradient(lp)
     return grad_fn
+
+
+def check_random_sampling(smp, prompt_text, eos, max_prompt=256):
+    """Identical prompts must yield different samples; Tunix 0.1.7 silently decodes greedily without top_p."""
+    o = smp(input_strings=[prompt_text] * 4, max_generation_steps=32, max_prompt_length=max_prompt,
+            temperature=1.0, top_k=None, top_p=1.0, seed=12345, eos_tokens=eos)
+    n = len({tuple(int(x) for x in t) for t in o.tokens})
+    assert n > 1, "sampler returned identical outputs for identical prompts: rollouts are not random"
+    print(f"sampling check: {n}/4 distinct outputs for identical prompts")
