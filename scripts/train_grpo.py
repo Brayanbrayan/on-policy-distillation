@@ -96,7 +96,8 @@ def main(a):
         comp, mask, ended = opd.completion_batch(out.tokens, a.max_new, IM_END, PAD)
         prompt_arr = jnp.asarray(np.asarray(out.padded_prompt_tokens)); comp_j = jnp.asarray(comp); mask_j = jnp.asarray(mask)
 
-        rewards = np.array([float(ev.is_correct(ev.first_number(ev.last_boxed(t)), g)) for t, g in zip(out.text, golds)])
+        correct = np.array([float(ev.is_correct(ev.first_number(ev.last_boxed(t)), g)) for t, g in zip(out.text, golds)])
+        rewards = correct * ended.astype(np.float64)   # an answer that never stops earns nothing
         R = rewards.reshape(P, G)
         adv_seq = ((R - R.mean(1, keepdims=True)) / (R.std(1, keepdims=True) + 1e-4)).reshape(-1)   # 0 for groups with no signal
         adv = jnp.asarray(np.repeat(adv_seq[:, None], comp.shape[1], axis=1).astype(np.float32))
@@ -124,7 +125,7 @@ def main(a):
         gen = int(sum(len(t) for t in out.tokens)); n_valid = float(mask.sum())
         cum["gen"] += gen; cum["sec"] += time.time() - t0
         rec = {"step": step, "gen_tokens": gen, "cum_gen_tokens": cum["gen"], "mean_len": round(n_valid / BS, 1),
-               "frac_ended": round(float(ended.mean()), 3), "reward_mean": round(float(rewards.mean()), 3),
+               "frac_ended": round(float(ended.mean()), 3), "reward_mean": round(float(rewards.mean()), 3), "correct_mean": round(float(correct.mean()), 3),
                "groups_with_signal": round(float((R.std(1) > 0).mean()), 2), "grad_norm": round(gnorm, 4),
                "t_sample": round(t_sample, 1), "t_update": round(t_update, 1), "train_seconds": round(cum["sec"], 1)}
         open(f"{run}/metrics.jsonl", "a").write(json.dumps(rec) + "\n")
