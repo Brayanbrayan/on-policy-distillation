@@ -78,7 +78,7 @@ def main(a):
         print(f"step {step}:", summary[step]); hbm(f"after step {step}")
         with open(f"results/final/{a.tag}_step{step}.jsonl", "w") as f:
             f.write("\n".join(json.dumps(r) for r in rows) + "\n")
-    json.dump({"tag": a.tag, "n": a.n, "steps": summary}, open(f"results/final/{a.tag}_summary.json", "w"), indent=2)
+    json.dump({"tag": a.tag, "n": a.n, "device": __import__("jax").devices()[0].device_kind, "steps": summary}, open(f"results/final/{a.tag}_summary.json", "w"), indent=2)
 
 
 if __name__ == "__main__":

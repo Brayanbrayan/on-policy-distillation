@@ -4,7 +4,7 @@ No teacher and no KL penalty. Same LoRA setup, sampling and token budget as trai
 
 Colab:  %run scripts/train_grpo.py --name grpo_smoke --steps 20
 """
-import argparse, json, os, subprocess, sys, time
+import argparse, json, os, shutil, subprocess, sys, time
 try:
     import datasets
 except ImportError:
@@ -42,7 +42,7 @@ def parse(argv=None):
 
 def main(a):
     run = f"results/runs/{a.name}"; os.makedirs(run, exist_ok=False)   # a new name per run
-    json.dump(vars(a), open(f"{run}/args.json", "w"), indent=2)
+    json.dump({**vars(a), "device": jax.devices()[0].device_kind}, open(f"{run}/args.json", "w"), indent=2)
     from google.colab import drive; drive.mount("/content/drive")
     ckpt = a.ckpt_dir or f"/content/drive/MyDrive/opd-runs/{a.name}"; os.makedirs(ckpt, exist_ok=True)
 
@@ -83,6 +83,7 @@ def main(a):
                "train_seconds": round(cum["sec"], 1), "eval_seconds": round(time.time() - t0), **res}
         open(f"{run}/eval.jsonl", "a").write(json.dumps(rec) + "\n"); print("EVAL", rec)
         opd.save_lora(params, f"{ckpt}/lora_step{step}.npz")
+        shutil.copytree(run, f"{ckpt}/logs", dirs_exist_ok=True)   # logs survive VM resets
         return rec
 
     for step in range(1, a.steps + 1):
