@@ -1,0 +1,7 @@
+{
+  "reconstructed_from_console_log": true,
+  "device": "TPU v5 lite",
+  "seed": 0,
+  "steps": 230,
+  "eval_every": 50
+}
