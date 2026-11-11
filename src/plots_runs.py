@@ -60,3 +60,20 @@ def make_all():
     accuracy_vs_tokens(ok); length_curve(ok)
     if "opd_s0_v2" in ok.values(): kl_curve("opd_s0_v2")
     print("figures written to results/figures/")
+
+def make_all():
+    runs = {"On-policy distillation (seed 0)": "opd_s0_v2", "GRPO, finish required (seed 0)": "grpo_s0_v2"}
+    ok = {}
+    for k, n in runs.items():
+        try: run_dir(n); ok[k] = n
+        except FileNotFoundError: print("missing run, skipped:", n)
+    accuracy_vs_tokens(ok); length_curve(ok)
+    if "opd_s0_v2" in ok.values(): kl_curve("opd_s0_v2")
+    allr = dict(ok)
+    try:
+        run_dir("grpo_s0_never_stops"); allr["GRPO, no finish requirement (collapsed)"] = "grpo_s0_never_stops"
+    except FileNotFoundError:
+        pass
+    length_curve(allr, out="results/figures/length_and_finish_all_runs.png")
+    accuracy_vs_tokens(allr, out="results/figures/accuracy_vs_tokens_all_runs.png")
+    print("figures written to results/figures/")
