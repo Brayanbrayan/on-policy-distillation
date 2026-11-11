@@ -1,0 +1,32 @@
+{
+  "tag": "opd_s0_v2",
+  "n": 1312,
+  "device": "TPU v5 lite",
+  "steps": {
+    "0": {
+      "n": 1312,
+      "pass@1": 0.6136,
+      "ci95_halfwidth": 0.0263,
+      "boxed_rate": 0.907,
+      "truncated_frac": 0.1014,
+      "mean_len": 250.2,
+      "eval_seconds": 319
+    },
+    "230": {
+      "n": 1312,
+      "pass@1": 0.6128,
+      "ci95_halfwidth": 0.0264,
+      "boxed_rate": 0.846,
+      "truncated_frac": 0.1776,
+      "mean_len": 281.6,
+      "eval_seconds": 322,
+      "diff_vs_step0": {
+        "mean": -0.0008,
+        "ci95": [
+          -0.0252,
+          0.0244
+        ]
+      }
+    }
+  }
+}
