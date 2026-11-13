@@ -24,6 +24,9 @@ def parse(argv=None):
     p.add_argument("--ckpt-dir", required=True)
     p.add_argument("--steps", type=int, nargs="+", required=True)
     p.add_argument("--n", type=int, default=1312)
+    p.add_argument("--rank", type=int, default=16)
+    p.add_argument("--alpha", type=float, default=32.0)
+    p.add_argument("--baseline", default=None, help="per-problem step-0 results file to compare against")
     p.add_argument("--bs", type=int, default=16)
     p.add_argument("--max-new", type=int, default=384)
     p.add_argument("--max-prompt", type=int, default=256)
@@ -48,13 +51,15 @@ def main(a):
     assert max(len(hf_tok.encode(p)) for p in prompts) <= a.max_prompt, "a prompt exceeds max-prompt"
 
     mesh = make_mesh()
-    student = apply_lora(load(STUDENT_ID, mesh), mesh, seed=0)
+    student = apply_lora(load(STUDENT_ID, mesh), mesh, rank=a.rank, alpha=a.alpha, seed=0)
     graphdef, fresh, rest = nnx.split(student, nnx.LoRAParam, ...)
     c = student.config
     smp = sampler_lib.Sampler(transformer=student, tokenizer=tok, cache_config=sampler_lib.CacheConfig(
         cache_size=a.max_prompt + a.max_new, num_layers=c.num_layers, num_kv_heads=c.num_kv_heads, head_dim=c.head_dim))
     os.makedirs("results/final", exist_ok=True)
     allrows, summary = {}, {}
+    if a.baseline:
+        allrows[0] = [json.loads(l) for l in open(a.baseline)]
     for step in a.steps:
         params = fresh if step == 0 else opd.load_lora(fresh, f"{a.ckpt_dir}/lora_step{step}.npz")
         nnx.update(student, params)

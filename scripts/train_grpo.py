@@ -34,6 +34,8 @@ def parse(argv=None):
     p.add_argument("--max-new", type=int, default=384)
     p.add_argument("--max-prompt", type=int, default=256)
     p.add_argument("--seed", type=int, default=0)
+    p.add_argument("--rank", type=int, default=16)
+    p.add_argument("--alpha", type=float, default=32.0)
     p.add_argument("--eval-every", type=int, default=0)
     p.add_argument("--eval-n", type=int, default=192)
     p.add_argument("--ckpt-dir", default=None)
@@ -53,7 +55,7 @@ def main(a):
     assert BS % MB == 0 and a.eval_n % BS == 0
 
     mesh = make_mesh()
-    student = apply_lora(load(STUDENT_ID, mesh), mesh, seed=a.seed); hbm("student + LoRA")
+    student = apply_lora(load(STUDENT_ID, mesh), mesh, rank=a.rank, alpha=a.alpha, seed=a.seed); hbm("student + LoRA")
     graphdef, params, rest = nnx.split(student, nnx.LoRAParam, ...)
     print(f"trainable LoRA params: {sum(int(np.prod(np.shape(x))) for x in jax.tree.leaves(params)) / 1e6:.2f}M")
 
