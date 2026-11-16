@@ -1,0 +1,23 @@
+{
+  "tag": "grpo_s0_v2_cap640",
+  "n": 1312,
+  "device": "TPU v5 lite",
+  "steps": {
+    "230": {
+      "n": 1312,
+      "pass@1": 0.3689,
+      "ci95_halfwidth": 0.0261,
+      "boxed_rate": 0.9611,
+      "truncated_frac": 0.0396,
+      "mean_len": 169.4,
+      "eval_seconds": 428,
+      "diff_vs_step0": {
+        "mean": -0.2866,
+        "ci95": [
+          -0.3133,
+          -0.2591
+        ]
+      }
+    }
+  }
+}
