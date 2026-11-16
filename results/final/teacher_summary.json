@@ -1,0 +1,61 @@
+{
+  "cap384": {
+    "all_1319": {
+      "n": 1319,
+      "pass@1": 0.7407,
+      "ci95_halfwidth": 0.0237,
+      "boxed_rate": 0.8613,
+      "truncated_frac": 0.1615,
+      "mean_len": 278.2
+    },
+    "first_1312": {
+      "n": 1312,
+      "pass@1": 0.7416,
+      "ci95_halfwidth": 0.0237,
+      "boxed_rate": 0.8613,
+      "truncated_frac": 0.1616,
+      "mean_len": 278.4
+    },
+    "first_192": {
+      "n": 192,
+      "pass@1": 0.7292,
+      "ci95_halfwidth": 0.0629,
+      "boxed_rate": 0.875,
+      "truncated_frac": 0.1406,
+      "mean_len": 279.2
+    }
+  },
+  "cap640": {
+    "all_1319": {
+      "n": 1319,
+      "pass@1": 0.8203,
+      "ci95_halfwidth": 0.0207,
+      "boxed_rate": 0.9826,
+      "truncated_frac": 0.0182,
+      "mean_len": 293.3
+    },
+    "first_1312": {
+      "n": 1312,
+      "pass@1": 0.8216,
+      "ci95_halfwidth": 0.0207,
+      "boxed_rate": 0.9825,
+      "truncated_frac": 0.0183,
+      "mean_len": 293.4
+    },
+    "first_192": {
+      "n": 192,
+      "pass@1": 0.7969,
+      "ci95_halfwidth": 0.0569,
+      "boxed_rate": 0.9896,
+      "truncated_frac": 0.0104,
+      "mean_len": 293.4
+    }
+  },
+  "teacher_minus_untrained_cap640": {
+    "mean": 0.1662,
+    "ci95": [
+      0.1395,
+      0.1921
+    ]
+  }
+}
