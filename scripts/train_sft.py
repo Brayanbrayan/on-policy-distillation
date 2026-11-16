@@ -31,6 +31,7 @@ def parse(argv=None):
     p.add_argument("--alpha", type=float, default=32.0)
     p.add_argument("--seed", type=int, default=None, help="LoRA init and data order; None reproduces the first run")
     p.add_argument("--eval-n", type=int, default=192)
+    p.add_argument("--filter-correct", action="store_true", help="C3: keep only teacher answers with the right final number")
     p.add_argument("--results", default="results/sft_gsm8k.json")
     return p.parse_args(argv)
 
@@ -42,6 +43,8 @@ def main(a):
     json.dump(vars(a), open(f"{a.run_dir}/args.json", "w"), indent=2)
 
     rows = [json.loads(l) for l in open(a.data)]
+    if a.filter_correct:
+        rows = [r for r in rows if r["correct"]]; print("kept", len(rows), "correct answers")
     hf_tok = AutoTokenizer.from_pretrained(STUDENT_ID)
     PAD = hf_tok.convert_tokens_to_ids("<|endoftext|>"); IM_END = hf_tok.convert_tokens_to_ids("<|im_end|>")
     L, MB, ACC, EPOCHS, LR = a.seq_len, a.mb, a.acc, a.epochs, a.lr
@@ -92,6 +95,9 @@ def main(a):
     t0 = time.time()
     with mesh:
         trainer.train(batches())
+    from flax import nnx; from src import opd
+    _, lora_params, _ = nnx.split(lora, nnx.LoRAParam, ...)
+    opd.save_lora(lora_params, f"{a.run_dir}/lora_step{n_opt_steps}.npz")
     train_seconds = round(time.time() - t0)       # covers only this run if it resumed from a checkpoint
     hbm("after training")
 
