@@ -1,0 +1,17 @@
+{
+  "name": "opd_lr3e5",
+  "steps": 230,
+  "rollout_bs": 16,
+  "mb": 4,
+  "lr": 3e-05,
+  "warmup": 5,
+  "max_new": 384,
+  "max_prompt": 256,
+  "seed": 0,
+  "rank": 16,
+  "alpha": 32.0,
+  "eval_every": 50,
+  "eval_n": 192,
+  "ckpt_dir": null,
+  "device": "TPU v5 lite"
+}

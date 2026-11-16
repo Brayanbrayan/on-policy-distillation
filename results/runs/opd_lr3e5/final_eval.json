@@ -1,0 +1,17 @@
+{
+  "step": 230,
+  "cum_gen_tokens": 1004071,
+  "cum_teacher_scored_tokens": 1007214,
+  "train_seconds": 1422.2,
+  "eval_seconds": 43,
+  "n": 192,
+  "pass@1": 0.5833,
+  "boxed_rate": 0.8125,
+  "mean_len": 280.0,
+  "truncated_frac": 0.2083,
+  "prompt_batch_shape": [
+    16,
+    256
+  ],
+  "longest_prompt": 163
+}
