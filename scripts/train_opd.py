@@ -34,6 +34,7 @@ def parse(argv=None):
     p.add_argument("--max-new", type=int, default=384)
     p.add_argument("--max-prompt", type=int, default=256)
     p.add_argument("--seed", type=int, default=0)
+    p.add_argument("--init-lora", default=None, help="start from saved LoRA weights (warm start)")
     p.add_argument("--rank", type=int, default=16)
     p.add_argument("--alpha", type=float, default=32.0)
     p.add_argument("--eval-every", type=int, default=0, help="0 = only at the end")
@@ -61,6 +62,8 @@ def main(a):
     n_lora = sum(int(np.prod(np.shape(x))) for x in jax.tree.leaves(params))
     assert n_lora > 0, "no nnx.LoRAParam found: qwix LoRA weights are a different type than expected"
     print(f"trainable LoRA params: {n_lora / 1e6:.2f}M")
+    if a.init_lora:
+        params = opd.load_lora(params, a.init_lora); nnx.update(student, params); print("warm start from", a.init_lora)
     params0 = [np.array(x) for x in jax.tree.leaves(params)]
     print("LoRA param dtypes:", sorted({str(x.dtype) for x in params0}))
 
