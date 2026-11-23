@@ -1,0 +1,23 @@
+{
+  "tag": "opd_s1",
+  "n": 1312,
+  "device": "TPU v5 lite",
+  "steps": {
+    "230": {
+      "n": 1312,
+      "pass@1": 0.6814,
+      "ci95_halfwidth": 0.0252,
+      "boxed_rate": 0.9764,
+      "truncated_frac": 0.0267,
+      "mean_len": 297.1,
+      "eval_seconds": 483,
+      "diff_vs_step0": {
+        "mean": 0.0259,
+        "ci95": [
+          -0.0015,
+          0.0511
+        ]
+      }
+    }
+  }
+}

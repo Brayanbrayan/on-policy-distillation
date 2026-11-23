@@ -1,0 +1,23 @@
+{
+  "tag": "opd_warm_sft",
+  "n": 1312,
+  "device": "TPU v5 lite",
+  "steps": {
+    "230": {
+      "n": 1312,
+      "pass@1": 0.673,
+      "ci95_halfwidth": 0.0254,
+      "boxed_rate": 0.9718,
+      "truncated_frac": 0.0297,
+      "mean_len": 296.1,
+      "eval_seconds": 482,
+      "diff_vs_step0": {
+        "mean": 0.0175,
+        "ci95": [
+          -0.0084,
+          0.0427
+        ]
+      }
+    }
+  }
+}
