@@ -1,0 +1,80 @@
+{
+  "setting": "first 1312 GSM8K test problems, greedy, 640-token cap; teacher on all 1319; paired 95% intervals vs the untrained student",
+  "untrained": {
+    "pass@1": 0.6555,
+    "ci95_halfwidth": 0.0257
+  },
+  "methods": [
+    {
+      "name": "SFT, all teacher answers",
+      "pass@1": 0.6784,
+      "diff": {
+        "mean": 0.0229,
+        "ci95": [
+          -0.0008,
+          0.048
+        ]
+      },
+      "teacher_tokens": 1002084
+    },
+    {
+      "name": "SFT, correct answers only",
+      "pass@1": 0.6715,
+      "diff": {
+        "mean": 0.016,
+        "ci95": [
+          -0.0076,
+          0.0396
+        ]
+      },
+      "teacher_tokens": 1002084
+    },
+    {
+      "name": "Distillation lr 1e-4",
+      "pass@1": 0.6692,
+      "diff": {
+        "mean": 0.0137,
+        "ci95": [
+          -0.0107,
+          0.0404
+        ]
+      },
+      "student_tokens": 1014191
+    },
+    {
+      "name": "Distillation lr 3e-5",
+      "pass@1": 0.6562,
+      "diff": {
+        "mean": 0.0008,
+        "ci95": [
+          -0.0236,
+          0.0252
+        ]
+      },
+      "student_tokens": 1010000
+    },
+    {
+      "name": "GRPO (finish required)",
+      "pass@1": 0.3689,
+      "diff": {
+        "mean": -0.2866,
+        "ci95": [
+          -0.3133,
+          -0.2591
+        ]
+      },
+      "student_tokens": 683113
+    },
+    {
+      "name": "Teacher Qwen3-1.7B",
+      "pass@1": 0.8203,
+      "diff": {
+        "mean": 0.1662,
+        "ci95": [
+          0.1395,
+          0.1921
+        ]
+      }
+    }
+  ]
+}
