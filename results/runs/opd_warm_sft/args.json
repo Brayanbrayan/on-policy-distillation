@@ -1,0 +1,18 @@
+{
+  "name": "opd_warm_sft",
+  "steps": 230,
+  "rollout_bs": 16,
+  "mb": 4,
+  "lr": 0.0001,
+  "warmup": 5,
+  "max_new": 384,
+  "max_prompt": 256,
+  "seed": 0,
+  "init_lora": "/content/drive/MyDrive/opd-runs/sft_v2/lora_step232.npz",
+  "rank": 16,
+  "alpha": 32.0,
+  "eval_every": 50,
+  "eval_n": 192,
+  "ckpt_dir": null,
+  "device": "TPU v5 lite"
+}

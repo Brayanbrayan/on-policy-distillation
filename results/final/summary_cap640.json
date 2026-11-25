@@ -75,6 +75,39 @@
           0.1921
         ]
       }
+    },
+    {
+      "name": "Distillation lr 1e-4, seed 1",
+      "pass@1": 0.6814,
+      "diff": {
+        "mean": 0.0259,
+        "ci95": [
+          -0.0015,
+          0.0511
+        ]
+      }
+    },
+    {
+      "name": "Distillation, warm start from SFT",
+      "pass@1": 0.673,
+      "diff": {
+        "mean": 0.0175,
+        "ci95": [
+          -0.0084,
+          0.0427
+        ]
+      }
+    },
+    {
+      "name": "GRPO lr 3e-5",
+      "pass@1": 0.6799,
+      "diff": {
+        "mean": 0.0244,
+        "ci95": [
+          -0.0015,
+          0.0511
+        ]
+      }
     }
   ]
 }

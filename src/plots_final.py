@@ -9,7 +9,7 @@ def paired_figure(path="results/final/summary_cap640.json", out="results/figures
     lo = [m["diff"]["ci95"][0] * 100 for m in d]; hi = [m["diff"]["ci95"][1] * 100 for m in d]
     fig, axs = plt.subplots(1, 2, figsize=(12, 4.3))
     for ax, zoom in zip(axs, (False, True)):
-        idx = [i for i, n in enumerate(names) if not (zoom and ("GRPO" in n or "Teacher" in n))]
+        idx = [i for i, n in enumerate(names) if not (zoom and abs(mean[i]) > 7)]
         y = list(range(len(idx)))
         ax.errorbar([mean[i] for i in idx], y, xerr=[[mean[i] - lo[i] for i in idx], [hi[i] - mean[i] for i in idx]], fmt="o", capsize=4)
         ax.set_yticks(y); ax.set_yticklabels([names[i] for i in idx]); ax.invert_yaxis()

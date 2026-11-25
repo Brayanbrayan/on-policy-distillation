@@ -1,0 +1,23 @@
+{
+  "tag": "grpo_lr3e5",
+  "n": 1312,
+  "device": "TPU v5 lite",
+  "steps": {
+    "230": {
+      "n": 1312,
+      "pass@1": 0.6799,
+      "ci95_halfwidth": 0.0252,
+      "boxed_rate": 0.968,
+      "truncated_frac": 0.0328,
+      "mean_len": 231.5,
+      "eval_seconds": 454,
+      "diff_vs_step0": {
+        "mean": 0.0244,
+        "ci95": [
+          -0.0015,
+          0.0511
+        ]
+      }
+    }
+  }
+}

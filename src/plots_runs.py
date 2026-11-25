@@ -77,3 +77,14 @@ def make_all():
     length_curve(allr, out="results/figures/length_and_finish_all_runs.png")
     accuracy_vs_tokens(allr, out="results/figures/accuracy_vs_tokens_all_runs.png")
     print("figures written to results/figures/")
+
+def make_final():
+    cand = {"Distillation, seed 0": "opd_s0_v2", "Distillation, seed 1": "opd_s1", "Distillation, lr 3e-5": "opd_lr3e5",
+            "GRPO, lr 1e-4": "grpo_s0_v2", "GRPO, lr 3e-5": "grpo_lr3e5"}
+    ok = {}
+    for k, n in cand.items():
+        try: run_dir(n); ok[k] = n
+        except FileNotFoundError: print("missing run, skipped:", n)
+    accuracy_vs_tokens(ok, out="results/figures/accuracy_vs_tokens_final.png")
+    length_curve(ok, out="results/figures/length_and_finish_final.png")
+    print("final run figures written")
